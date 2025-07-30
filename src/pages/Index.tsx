@@ -6,6 +6,7 @@ import HomeDashboard from '@/components/HomeDashboard';
 import CustomerList from '@/components/CustomerList';
 import AddCustomerForm from '@/components/AddCustomerForm';
 import InvoiceHistory from '@/components/InvoiceHistory';
+import ProductList from '@/components/ProductList';
 import ProfileSettings from '@/components/ProfileSettings';
 import BottomNavigation from '@/components/BottomNavigation';
 
@@ -19,14 +20,19 @@ type AppScreen =
   | 'invoices' 
   | 'profile'
   | 'start-visit'
-  | 'create-invoice';
+  | 'create-invoice'
+  | 'product-list';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('splash');
   const [activeTab, setActiveTab] = useState('home');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
 
   const navigateToScreen = (screen: AppScreen, data?: any) => {
+    if (data) {
+      setSelectedCustomer(data);
+    }
     setCurrentScreen(screen);
     if (screen === 'home' || screen === 'customers' || screen === 'invoices' || screen === 'profile') {
       setActiveTab(screen);
@@ -73,6 +79,24 @@ const Index = () => {
     setCurrentScreen('customers');
   };
 
+  const handleCreateInvoice = () => {
+    // For demo purposes, we'll use a default customer if none selected
+    if (!selectedCustomer) {
+      setSelectedCustomer({
+        id: '1',
+        name: 'Al Rashid Trading Co.',
+        phone: '+971 50 123 4567'
+      });
+    }
+    setCurrentScreen('product-list');
+  };
+
+  const handleProductsSelected = (products: any[]) => {
+    console.log('Products selected for invoice:', products);
+    // This would typically navigate to invoice summary/review screen
+    setCurrentScreen('home');
+  };
+
   const renderScreen = () => {
     switch (currentScreen) {
       case 'splash':
@@ -110,6 +134,15 @@ const Index = () => {
       case 'profile':
         return <ProfileSettings onLogout={handleLogout} />;
       
+      case 'product-list':
+        return (
+          <ProductList
+            onBack={() => setCurrentScreen('home')}
+            onAddToInvoice={handleProductsSelected}
+            customerName={selectedCustomer?.name}
+          />
+        );
+      
       case 'start-visit':
         return (
           <div className="mobile-container bg-background flex items-center justify-center">
@@ -131,10 +164,17 @@ const Index = () => {
           <div className="mobile-container bg-background flex items-center justify-center">
             <div className="text-center p-6">
               <h2 className="text-xl font-semibold mb-4">Create Invoice Feature</h2>
-              <p className="text-muted-foreground mb-6">Invoice creation form will be implemented here</p>
+              <p className="text-muted-foreground mb-6">Click below to select products for invoice</p>
+              <button 
+                onClick={handleCreateInvoice}
+                className="btn-primary mb-4"
+              >
+                Select Products
+              </button>
+              <br />
               <button 
                 onClick={() => setCurrentScreen('home')}
-                className="btn-primary"
+                className="btn-secondary"
               >
                 Back to Home
               </button>
