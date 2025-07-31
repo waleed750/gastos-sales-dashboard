@@ -77,6 +77,13 @@ const HomeDashboard = ({ onNavigate }: HomeDashboardProps) => {
       color: 'success',
       action: () => onNavigate('create-invoice'),
     },
+    {
+      title: 'Visit History',
+      subtitle: 'View past visits',
+      icon: Clock,
+      color: 'warning',
+      action: () => onNavigate('visit-history'),
+    },
   ];
 
   return (

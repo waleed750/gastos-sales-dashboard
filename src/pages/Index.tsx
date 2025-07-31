@@ -9,6 +9,9 @@ import InvoiceHistory from '@/components/InvoiceHistory';
 import ProductList from '@/components/ProductList';
 import ProfileSettings from '@/components/ProfileSettings';
 import BottomNavigation from '@/components/BottomNavigation';
+import StartVisitScreen from '@/components/StartVisitScreen';
+import InvoiceReportScreen from '@/components/InvoiceReportScreen';
+import VisitHistoryScreen from '@/components/VisitHistoryScreen';
 
 type AppScreen = 
   | 'splash' 
@@ -21,17 +24,25 @@ type AppScreen =
   | 'profile'
   | 'start-visit'
   | 'create-invoice'
-  | 'product-list';
+  | 'product-list'
+  | 'invoice-report'
+  | 'visit-history';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('splash');
   const [activeTab, setActiveTab] = useState('home');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+  const [currentVisit, setCurrentVisit] = useState<any>(null);
+  const [invoiceReportData, setInvoiceReportData] = useState<any>(null);
 
   const navigateToScreen = (screen: AppScreen, data?: any) => {
     if (data) {
-      setSelectedCustomer(data);
+      if (screen === 'invoice-report') {
+        setInvoiceReportData(data);
+      } else {
+        setSelectedCustomer(data);
+      }
     }
     setCurrentScreen(screen);
     if (screen === 'home' || screen === 'customers' || screen === 'invoices' || screen === 'profile') {
@@ -93,8 +104,29 @@ const Index = () => {
 
   const handleProductsSelected = (products: any[]) => {
     console.log('Products selected for invoice:', products);
-    // This would typically navigate to invoice summary/review screen
-    setCurrentScreen('home');
+    
+    // Generate mock invoice data with current visit info
+    const currentVisitData = JSON.parse(localStorage.getItem('currentVisit') || 'null');
+    const mockInvoiceData = {
+      id: crypto.randomUUID(),
+      invoiceNumber: `INV-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9999) + 1).padStart(4, '0')}`,
+      customerName: selectedCustomer?.name || 'Selected Customer',
+      customerAddress: selectedCustomer?.address || 'Customer Address',
+      salesRep: 'Ahmed Al-Mohammed',
+      items: products.map((product: any) => ({
+        name: product.name,
+        quantity: product.quantity,
+        unitPrice: product.price,
+        total: product.price * product.quantity
+      })),
+      subtotal: products.reduce((sum: number, p: any) => sum + (p.price * p.quantity), 0),
+      tax: products.reduce((sum: number, p: any) => sum + (p.price * p.quantity), 0) * 0.15,
+      total: products.reduce((sum: number, p: any) => sum + (p.price * p.quantity), 0) * 1.15,
+      visitData: currentVisitData
+    };
+    
+    setInvoiceReportData(mockInvoiceData);
+    setCurrentScreen('invoice-report');
   };
 
   const renderScreen = () => {
@@ -145,18 +177,13 @@ const Index = () => {
       
       case 'start-visit':
         return (
-          <div className="mobile-container bg-background flex items-center justify-center">
-            <div className="text-center p-6">
-              <h2 className="text-xl font-semibold mb-4">Start Visit Feature</h2>
-              <p className="text-muted-foreground mb-6">This feature will be implemented with map integration</p>
-              <button 
-                onClick={() => setCurrentScreen('home')}
-                className="btn-primary"
-              >
-                Back to Home
-              </button>
-            </div>
-          </div>
+          <StartVisitScreen
+            onBack={() => setCurrentScreen('home')}
+            onVisitStarted={(visitData) => {
+              setCurrentVisit(visitData);
+              setCurrentScreen('home');
+            }}
+          />
         );
       
       case 'create-invoice':
@@ -180,6 +207,22 @@ const Index = () => {
               </button>
             </div>
           </div>
+        );
+      
+      case 'invoice-report':
+        return (
+          <InvoiceReportScreen
+            invoiceData={invoiceReportData}
+            onBack={() => setCurrentScreen('invoices')}
+          />
+        );
+
+      case 'visit-history':
+        return (
+          <VisitHistoryScreen
+            onBack={() => setCurrentScreen('home')}
+            onNavigate={navigateToScreen}
+          />
         );
       
       default:
