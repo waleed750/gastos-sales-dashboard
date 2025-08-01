@@ -12,6 +12,7 @@ import BottomNavigation from '@/components/BottomNavigation';
 import StartVisitScreen from '@/components/StartVisitScreen';
 import InvoiceReportScreen from '@/components/InvoiceReportScreen';
 import VisitHistoryScreen from '@/components/VisitHistoryScreen';
+import ReportsScreen from '@/components/ReportsScreen';
 
 type AppScreen = 
   | 'splash' 
@@ -22,6 +23,7 @@ type AppScreen =
   | 'add-customer' 
   | 'invoices' 
   | 'profile'
+  | 'reports'
   | 'start-visit'
   | 'create-invoice'
   | 'product-list'
@@ -45,7 +47,7 @@ const Index = () => {
       }
     }
     setCurrentScreen(screen);
-    if (screen === 'home' || screen === 'customers' || screen === 'invoices' || screen === 'profile') {
+    if (screen === 'home' || screen === 'customers' || screen === 'invoices' || screen === 'reports' || screen === 'profile') {
       setActiveTab(screen);
     }
   };
@@ -61,6 +63,9 @@ const Index = () => {
         break;
       case 'invoices':
         setCurrentScreen('invoices');
+        break;
+      case 'reports':
+        setCurrentScreen('reports');
         break;
       case 'profile':
         setCurrentScreen('profile');
@@ -163,6 +168,9 @@ const Index = () => {
       case 'invoices':
         return <InvoiceHistory onNavigate={navigateToScreen} />;
       
+      case 'reports':
+        return <ReportsScreen />;
+      
       case 'profile':
         return <ProfileSettings onLogout={handleLogout} />;
       
@@ -230,7 +238,7 @@ const Index = () => {
     }
   };
 
-  const showBottomNav = ['home', 'customers', 'invoices', 'profile'].includes(currentScreen);
+  const showBottomNav = ['home', 'customers', 'invoices', 'reports', 'profile'].includes(currentScreen);
 
   return (
     <div className="relative">
