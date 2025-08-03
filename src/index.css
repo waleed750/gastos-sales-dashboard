@@ -148,9 +148,54 @@
 }
 
 @layer components {
-  /* Mobile Container */
+  /* Responsive Container System */
   .mobile-container {
-    @apply max-w-sm mx-auto bg-background min-h-screen relative overflow-hidden;
+    @apply w-full max-w-sm mx-auto bg-background min-h-screen relative overflow-hidden;
+    /* Tablet responsive breakpoint */
+    @screen md {
+      @apply max-w-4xl px-8;
+    }
+    /* Desktop responsive breakpoint */
+    @screen lg {
+      @apply max-w-6xl px-12;
+    }
+    @screen xl {
+      @apply max-w-7xl;
+    }
+  }
+
+  /* Responsive Grid System */
+  .responsive-grid {
+    @apply grid grid-cols-1 gap-4;
+    @screen md {
+      @apply grid-cols-2 gap-6;
+    }
+    @screen lg {
+      @apply grid-cols-3 gap-8;
+    }
+  }
+
+  .responsive-grid-2 {
+    @apply grid grid-cols-2 gap-4;
+    @screen md {
+      @apply grid-cols-4 gap-6;
+    }
+    @screen lg {
+      @apply grid-cols-4 gap-8;
+    }
+  }
+
+  .responsive-grid-auto {
+    @apply grid grid-cols-1 gap-4;
+    @screen sm {
+      @apply grid-cols-2;
+    }
+    @screen md {
+      @apply grid-cols-3 gap-6;
+    }
+    @screen lg {
+      @apply grid-cols-4 gap-8;
+    }
   }
 
   /* Gradient Backgrounds */
@@ -194,9 +239,45 @@
     @apply bg-warning/10 text-warning border border-warning/20 rounded-full px-3 py-1 text-sm font-medium;
   }
 
-  /* Navigation */
+  /* Responsive Navigation */
   .nav-bottom {
-    @apply fixed bottom-0 left-1/2 transform -translate-x-1/2 max-w-sm w-full bg-card/95 backdrop-blur-md border-t border-border/50 px-4 py-2;
+    @apply fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-card/95 backdrop-blur-md border-t border-border/50 px-4 py-2;
+    /* Tablet and Desktop responsive navigation */
+    @screen md {
+      @apply max-w-4xl px-8 py-3;
+    }
+    @screen lg {
+      @apply max-w-6xl px-12 py-4;
+    }
+    @screen xl {
+      @apply max-w-7xl;
+    }
+  }
+
+  /* Tablet Optimized Components */
+  .tablet-two-column {
+    @apply flex flex-col space-y-4;
+    @screen md {
+      @apply flex-row space-y-0 space-x-6;
+    }
+  }
+
+  .tablet-card-layout {
+    @apply space-y-4;
+    @screen md {
+      @apply grid grid-cols-2 gap-6 space-y-0;
+    }
+    @screen lg {
+      @apply grid-cols-3;
+    }
+  }
+
+  /* Touch-friendly sizing for tablets */
+  .touch-friendly {
+    @apply min-h-[44px] min-w-[44px];
+    @screen md {
+      @apply min-h-[48px] min-w-[48px];
+    }
   }
 
   /* Animations */

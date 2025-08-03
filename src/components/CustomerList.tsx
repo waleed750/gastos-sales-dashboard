@@ -101,70 +101,72 @@ const CustomerList = ({ onNavigate }: CustomerListProps) => {
 
   return (
     <div className="mobile-container bg-background pb-20">
-      <div className="p-6">
+      <div className="p-6 md:p-8 lg:p-12">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 md:mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Customers</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">Customers</h1>
+            <p className="text-muted-foreground md:text-lg">
               {filteredCustomers.length} customers found
             </p>
           </div>
           <Button
             onClick={() => onNavigate('add-customer')}
-            variant="premium"
-            size="icon"
+            variant="default"
+            size="default"
+            className="touch-friendly"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-5 h-5 md:w-6 md:h-6 md:mr-2" />
+            <span className="hidden md:inline">Add Customer</span>
           </Button>
         </div>
 
         {/* Search Bar */}
-        <div className="relative mb-6">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+        <div className="relative mb-6 md:mb-8">
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 md:w-6 md:h-6 text-muted-foreground" />
           <Input
             placeholder="Search customers..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="input-premium pl-12"
+            className="input-premium pl-12 md:pl-14 h-12 md:h-14 text-base md:text-lg"
           />
         </div>
 
         {/* Customer List */}
-        <div className="space-y-4">
+        <div className="responsive-grid">
           {filteredCustomers.map((customer) => (
             <div
               key={customer.id}
               onClick={() => onNavigate('customer-detail', customer)}
-              className="card-premium p-4 cursor-pointer hover:shadow-md transition-all duration-300"
+              className="card-premium p-4 md:p-6 cursor-pointer hover:shadow-md transition-all duration-300 touch-friendly"
             >
-              <div className="flex items-start justify-between mb-3">
+              <div className="flex items-start justify-between mb-3 md:mb-4">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-foreground mb-1">
+                  <h3 className="font-semibold text-foreground mb-1 md:text-lg">
                     {customer.name}
                   </h3>
-                  <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-2">
-                    <Phone className="w-4 h-4" />
+                  <div className="flex items-center space-x-2 text-sm md:text-base text-muted-foreground mb-2">
+                    <Phone className="w-4 h-4 md:w-5 md:h-5" />
                     <span>{customer.phone}</span>
                   </div>
-                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <MapPin className="w-4 h-4" />
-                    <span>{customer.address}</span>
+                  <div className="flex items-center space-x-2 text-sm md:text-base text-muted-foreground">
+                    <MapPin className="w-4 h-4 md:w-5 md:h-5" />
+                    <span className="line-clamp-2">{customer.address}</span>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="text-right ml-4">
                   <div className={`${getStatusBadge(customer.status)} mb-2`}>
                     {getStatusText(customer.status)}
                   </div>
-                  <p className="text-sm font-medium text-foreground">
+                  <p className="text-sm md:text-base font-medium text-foreground">
                     {customer.totalSales}
                   </p>
                 </div>
               </div>
               
               <div className="flex items-center justify-between pt-3 border-t border-border/50">
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                  <Clock className="w-4 h-4" />
+                <div className="flex items-center space-x-2 text-sm md:text-base text-muted-foreground">
+                  <Clock className="w-4 h-4 md:w-5 md:h-5" />
                   <span>Last visit: {customer.lastVisit}</span>
                 </div>
                 <Button
@@ -174,6 +176,7 @@ const CustomerList = ({ onNavigate }: CustomerListProps) => {
                   }}
                   variant="outline"
                   size="sm"
+                  className="touch-friendly"
                 >
                   Start Visit
                 </Button>
@@ -183,19 +186,20 @@ const CustomerList = ({ onNavigate }: CustomerListProps) => {
         </div>
 
         {filteredCustomers.length === 0 && searchQuery && (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="w-8 h-8 text-muted-foreground" />
+          <div className="text-center py-12 md:py-16">
+            <div className="w-16 h-16 md:w-20 md:h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+              <Search className="w-8 h-8 md:w-10 md:h-10 text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-medium text-foreground mb-2">
+            <h3 className="text-lg md:text-xl font-medium text-foreground mb-2">
               No customers found
             </h3>
-            <p className="text-muted-foreground mb-4">
+            <p className="text-muted-foreground mb-4 md:mb-6 md:text-lg">
               Try adjusting your search terms
             </p>
             <Button
               onClick={() => setSearchQuery('')}
               variant="outline"
+              className="touch-friendly"
             >
               Clear Search
             </Button>

@@ -23,14 +23,14 @@ const BottomNavigation = ({ activeTab, onTabChange }: BottomNavigationProps) => 
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`flex flex-col items-center justify-center py-2 px-3 rounded-xl transition-all duration-300 ${
+              className={`flex flex-col items-center justify-center py-2 px-3 md:py-3 md:px-4 lg:px-6 rounded-xl transition-all duration-300 touch-friendly ${
                 isActive 
                   ? 'bg-primary text-primary-foreground shadow-primary' 
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              <tab.icon className={`w-5 h-5 mb-1 ${isActive ? 'text-white' : ''}`} />
-              <span className={`text-xs font-medium ${isActive ? 'text-white' : ''}`}>
+              <tab.icon className={`w-5 h-5 md:w-6 md:h-6 mb-1 ${isActive ? 'text-white' : ''}`} />
+              <span className={`text-xs md:text-sm font-medium ${isActive ? 'text-white' : ''}`}>
                 {tab.label}
               </span>
             </button>
