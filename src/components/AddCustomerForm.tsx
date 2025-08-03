@@ -62,152 +62,156 @@ const AddCustomerForm = ({ onBack, onSave }: AddCustomerFormProps) => {
   };
 
   return (
-    <div className="mobile-container bg-background">
-      <div className="p-6">
+    <div className="mobile-container bg-background pb-20">
+      <div className="p-6 md:p-8 lg:p-12">
         {/* Header */}
-        <div className="flex items-center mb-8">
+        <div className="flex items-center mb-8 md:mb-12">
           <Button
             onClick={onBack}
             variant="ghost"
             size="icon"
-            className="mr-2"
+            className="mr-2 md:mr-4 touch-friendly"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
           </Button>
           <div>
-            <h1 className="text-xl font-semibold text-foreground">Add Customer</h1>
-            <p className="text-sm text-muted-foreground">Create new customer profile</p>
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-semibold text-foreground">Add Customer</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Create new customer profile</p>
           </div>
         </div>
 
-        {/* Form */}
-        <div className="space-y-6">
-          {/* Basic Information */}
-          <div className="card-premium p-4">
-            <h3 className="font-semibold text-foreground mb-4">Basic Information</h3>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-foreground mb-2 block">
-                  Customer Name *
-                </label>
-                <Input
-                  placeholder="e.g., Al Rashid Trading Co."
-                  value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  className={`input-premium ${errors.name ? 'border-destructive' : ''}`}
-                />
-                {errors.name && (
-                  <p className="text-xs text-destructive mt-1">{errors.name}</p>
-                )}
-              </div>
+        <div className="tablet-two-column">
+          {/* Left Column - Form */}
+          <div className="flex-1 space-y-6 md:space-y-8">
+            {/* Basic Information */}
+            <div className="card-premium p-4 md:p-6">
+              <h3 className="font-semibold text-foreground mb-4 md:mb-6 md:text-lg">Basic Information</h3>
+              
+              <div className="space-y-4 md:space-y-6">
+                <div>
+                  <label className="text-sm md:text-base font-medium text-foreground mb-2 block">
+                    Customer Name *
+                  </label>
+                  <Input
+                    placeholder="e.g., Al Rashid Trading Co."
+                    value={formData.name}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    className={`input-premium touch-friendly ${errors.name ? 'border-destructive' : ''}`}
+                  />
+                  {errors.name && (
+                    <p className="text-xs md:text-sm text-destructive mt-1">{errors.name}</p>
+                  )}
+                </div>
 
-              <div>
-                <label className="text-sm font-medium text-foreground mb-2 block">
-                  Phone Number *
-                </label>
-                <Input
-                  type="tel"
-                  placeholder="+971 50 123 4567"
-                  value={formData.phone}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
-                  className={`input-premium ${errors.phone ? 'border-destructive' : ''}`}
-                />
-                {errors.phone && (
-                  <p className="text-xs text-destructive mt-1">{errors.phone}</p>
-                )}
-              </div>
+                <div>
+                  <label className="text-sm md:text-base font-medium text-foreground mb-2 block">
+                    Phone Number *
+                  </label>
+                  <Input
+                    type="tel"
+                    placeholder="+971 50 123 4567"
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                    className={`input-premium touch-friendly ${errors.phone ? 'border-destructive' : ''}`}
+                  />
+                  {errors.phone && (
+                    <p className="text-xs md:text-sm text-destructive mt-1">{errors.phone}</p>
+                  )}
+                </div>
 
-              <div>
-                <label className="text-sm font-medium text-foreground mb-2 block">
-                  Email Address
-                </label>
-                <Input
-                  type="email"
-                  placeholder="customer@company.com"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  className="input-premium"
-                />
+                <div>
+                  <label className="text-sm md:text-base font-medium text-foreground mb-2 block">
+                    Email Address
+                  </label>
+                  <Input
+                    type="email"
+                    placeholder="customer@company.com"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className="input-premium touch-friendly"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Location Information */}
+            <div className="card-premium p-4 md:p-6">
+              <h3 className="font-semibold text-foreground mb-4 md:mb-6 md:text-lg">Location</h3>
+              
+              <div className="space-y-4 md:space-y-6">
+                <div>
+                  <label className="text-sm md:text-base font-medium text-foreground mb-2 block">
+                    Address *
+                  </label>
+                  <Textarea
+                    placeholder="Street, City, Emirate"
+                    value={formData.address}
+                    onChange={(e) => handleInputChange('address', e.target.value)}
+                    className={`input-premium min-h-[80px] md:min-h-[100px] ${errors.address ? 'border-destructive' : ''}`}
+                  />
+                  {errors.address && (
+                    <p className="text-xs md:text-sm text-destructive mt-1">{errors.address}</p>
+                  )}
+                </div>
+
+                <Button
+                  variant="outline"
+                  className="w-full touch-friendly"
+                  onClick={() => {
+                    // Mock location selection
+                    handleInputChange('location', '25.2048° N, 55.2708° E');
+                  }}
+                >
+                  <MapPin className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                  {formData.location ? 'Update Location' : 'Select Location on Map'}
+                </Button>
+                
+                {formData.location && (
+                  <p className="text-xs md:text-sm text-success">
+                    📍 Location saved: {formData.location}
+                  </p>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Location Information */}
-          <div className="card-premium p-4">
-            <h3 className="font-semibold text-foreground mb-4">Location</h3>
-            
-            <div className="space-y-4">
+          {/* Right Column - Additional Info and Actions */}
+          <div className="md:w-80 lg:w-96 space-y-6 md:space-y-8">
+            {/* Additional Notes */}
+            <div className="card-premium p-4 md:p-6">
+              <h3 className="font-semibold text-foreground mb-4 md:mb-6 md:text-lg">Additional Information</h3>
+              
               <div>
-                <label className="text-sm font-medium text-foreground mb-2 block">
-                  Address *
+                <label className="text-sm md:text-base font-medium text-foreground mb-2 block">
+                  Notes
                 </label>
                 <Textarea
-                  placeholder="Street, City, Emirate"
-                  value={formData.address}
-                  onChange={(e) => handleInputChange('address', e.target.value)}
-                  className={`input-premium min-h-[80px] ${errors.address ? 'border-destructive' : ''}`}
+                  placeholder="Any additional notes about this customer..."
+                  value={formData.notes}
+                  onChange={(e) => handleInputChange('notes', e.target.value)}
+                  className="input-premium min-h-[100px] md:min-h-[120px]"
                 />
-                {errors.address && (
-                  <p className="text-xs text-destructive mt-1">{errors.address}</p>
-                )}
               </div>
+            </div>
 
+            {/* Action Buttons */}
+            <div className="space-y-3 md:space-y-4">
               <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => {
-                  // Mock location selection
-                  handleInputChange('location', '25.2048° N, 55.2708° E');
-                }}
+                onClick={handleSave}
+                className="w-full btn-primary touch-friendly"
               >
-                <MapPin className="w-4 h-4 mr-2" />
-                {formData.location ? 'Update Location' : 'Select Location on Map'}
+                <Save className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                Save Customer
               </Button>
               
-              {formData.location && (
-                <p className="text-xs text-success">
-                  📍 Location saved: {formData.location}
-                </p>
-              )}
+              <Button
+                onClick={onBack}
+                variant="outline"
+                className="w-full touch-friendly"
+              >
+                Cancel
+              </Button>
             </div>
-          </div>
-
-          {/* Additional Notes */}
-          <div className="card-premium p-4">
-            <h3 className="font-semibold text-foreground mb-4">Additional Information</h3>
-            
-            <div>
-              <label className="text-sm font-medium text-foreground mb-2 block">
-                Notes
-              </label>
-              <Textarea
-                placeholder="Any additional notes about this customer..."
-                value={formData.notes}
-                onChange={(e) => handleInputChange('notes', e.target.value)}
-                className="input-premium min-h-[100px]"
-              />
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="space-y-3 pt-4">
-            <Button
-              onClick={handleSave}
-              variant="premium"
-              size="full"
-            >
-              <Save className="w-4 h-4 mr-2" />
-              Save Customer
-            </Button>
-            
-            <Button
-              onClick={onBack}
-              variant="outline"
-              size="full"
-            >
-              Cancel
-            </Button>
           </div>
         </div>
       </div>
