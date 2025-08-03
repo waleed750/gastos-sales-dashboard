@@ -150,52 +150,20 @@
 @layer components {
   /* Responsive Container System */
   .mobile-container {
-    @apply w-full max-w-sm mx-auto bg-background min-h-screen relative overflow-hidden;
-    /* Tablet responsive breakpoint */
-    @screen md {
-      @apply max-w-4xl px-8;
-    }
-    /* Desktop responsive breakpoint */
-    @screen lg {
-      @apply max-w-6xl px-12;
-    }
-    @screen xl {
-      @apply max-w-7xl;
-    }
+    @apply w-full max-w-sm mx-auto bg-background min-h-screen relative overflow-hidden md:max-w-4xl md:px-8 lg:max-w-6xl lg:px-12 xl:max-w-7xl;
   }
 
   /* Responsive Grid System */
   .responsive-grid {
-    @apply grid grid-cols-1 gap-4;
-    @screen md {
-      @apply grid-cols-2 gap-6;
-    }
-    @screen lg {
-      @apply grid-cols-3 gap-8;
-    }
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-8;
   }
 
   .responsive-grid-2 {
-    @apply grid grid-cols-2 gap-4;
-    @screen md {
-      @apply grid-cols-4 gap-6;
-    }
-    @screen lg {
-      @apply grid-cols-4 gap-8;
-    }
+    @apply grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:gap-8;
   }
 
   .responsive-grid-auto {
-    @apply grid grid-cols-1 gap-4;
-    @screen sm {
-      @apply grid-cols-2;
-    }
-    @screen md {
-      @apply grid-cols-3 gap-6;
-    }
-    @screen lg {
-      @apply grid-cols-4 gap-8;
-    }
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8;
   }
 
   /* Gradient Backgrounds */
@@ -241,43 +209,21 @@
 
   /* Responsive Navigation */
   .nav-bottom {
-    @apply fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-card/95 backdrop-blur-md border-t border-border/50 px-4 py-2;
-    /* Tablet and Desktop responsive navigation */
-    @screen md {
-      @apply max-w-4xl px-8 py-3;
-    }
-    @screen lg {
-      @apply max-w-6xl px-12 py-4;
-    }
-    @screen xl {
-      @apply max-w-7xl;
-    }
+    @apply fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-card/95 backdrop-blur-md border-t border-border/50 px-4 py-2 md:max-w-4xl md:px-8 md:py-3 lg:max-w-6xl lg:px-12 lg:py-4 xl:max-w-7xl;
   }
 
   /* Tablet Optimized Components */
   .tablet-two-column {
-    @apply flex flex-col space-y-4;
-    @screen md {
-      @apply flex-row space-y-0 space-x-6;
-    }
+    @apply flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-6;
   }
 
   .tablet-card-layout {
-    @apply space-y-4;
-    @screen md {
-      @apply grid grid-cols-2 gap-6 space-y-0;
-    }
-    @screen lg {
-      @apply grid-cols-3;
-    }
+    @apply space-y-4 md:grid md:grid-cols-2 md:gap-6 md:space-y-0 lg:grid-cols-3;
   }
 
   /* Touch-friendly sizing for tablets */
   .touch-friendly {
-    @apply min-h-[44px] min-w-[44px];
-    @screen md {
-      @apply min-h-[48px] min-w-[48px];
-    }
+    @apply min-h-[44px] min-w-[44px] md:min-h-[48px] md:min-w-[48px];
   }
 
   /* Animations */
