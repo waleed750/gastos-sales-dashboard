@@ -221,7 +221,26 @@ const InvoiceHistory = ({ onNavigate }: InvoiceHistoryProps) => {
                   
                   <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t border-border/50">
                     <Button
-                      onClick={() => onNavigate('invoice-detail', invoice)}
+                      onClick={() => {
+                        // Convert invoice to detailed format
+                        const detailedInvoice = {
+                          ...invoice,
+                          dueDate: '2024-02-15',
+                          customerEmail: 'contact@alrashidtrading.ae',
+                          customerAddress: '123 Business Bay, Dubai, UAE',
+                          items: [
+                            { name: 'Product A', quantity: 2, unitPrice: 125.50, total: 251.00 },
+                            { name: 'Product B', quantity: 1, unitPrice: 75.25, total: 75.25 },
+                            { name: 'Service Fee', quantity: 1, unitPrice: 50.00, total: 50.00 }
+                          ],
+                          subtotal: parseFloat(invoice.amount.replace('$', '').replace(',', '')) / 1.15,
+                          tax: parseFloat(invoice.amount.replace('$', '').replace(',', '')) * 0.15 / 1.15,
+                          total: parseFloat(invoice.amount.replace('$', '').replace(',', '')),
+                          paymentTerms: 'Net 30',
+                          notes: 'Thank you for your business. Please remit payment within 30 days of invoice date.'
+                        };
+                        onNavigate('invoice-details', detailedInvoice);
+                      }}
                       variant="outline"
                       className="flex-1 touch-friendly"
                     >

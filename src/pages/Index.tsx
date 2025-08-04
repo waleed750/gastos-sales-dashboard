@@ -13,6 +13,7 @@ import StartVisitScreen from '@/components/StartVisitScreen';
 import InvoiceReportScreen from '@/components/InvoiceReportScreen';
 import VisitHistoryScreen from '@/components/VisitHistoryScreen';
 import ReportsScreen from '@/components/ReportsScreen';
+import InvoiceDetailsScreen from '@/components/InvoiceDetailsScreen';
 
 type AppScreen = 
   | 'splash' 
@@ -22,6 +23,7 @@ type AppScreen =
   | 'customers' 
   | 'add-customer' 
   | 'invoices' 
+  | 'invoice-details'
   | 'profile'
   | 'reports'
   | 'start-visit'
@@ -37,11 +39,14 @@ const Index = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [currentVisit, setCurrentVisit] = useState<any>(null);
   const [invoiceReportData, setInvoiceReportData] = useState<any>(null);
+  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
 
   const navigateToScreen = (screen: AppScreen, data?: any) => {
     if (data) {
       if (screen === 'invoice-report') {
         setInvoiceReportData(data);
+      } else if (screen === 'invoice-details') {
+        setSelectedInvoice(data);
       } else {
         setSelectedCustomer(data);
       }
@@ -230,6 +235,14 @@ const Index = () => {
           <VisitHistoryScreen
             onBack={() => setCurrentScreen('home')}
             onNavigate={navigateToScreen}
+          />
+        );
+
+      case 'invoice-details':
+        return (
+          <InvoiceDetailsScreen
+            invoiceData={selectedInvoice}
+            onBack={() => setCurrentScreen('invoices')}
           />
         );
       
