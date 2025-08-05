@@ -14,6 +14,10 @@ import InvoiceReportScreen from '@/components/InvoiceReportScreen';
 import VisitHistoryScreen from '@/components/VisitHistoryScreen';
 import ReportsScreen from '@/components/ReportsScreen';
 import InvoiceDetailsScreen from '@/components/InvoiceDetailsScreen';
+import CustomerSelectionScreen from '@/components/CustomerSelectionScreen';
+import EnhancedProductList from '@/components/EnhancedProductList';
+import InvoiceRemarksScreen from '@/components/InvoiceRemarksScreen';
+import InvoiceReviewScreen from '@/components/InvoiceReviewScreen';
 
 type AppScreen = 
   | 'splash' 
@@ -30,7 +34,11 @@ type AppScreen =
   | 'create-invoice'
   | 'product-list'
   | 'invoice-report'
-  | 'visit-history';
+  | 'visit-history'
+  | 'customer-selection'
+  | 'enhanced-product-list'
+  | 'invoice-remarks'
+  | 'invoice-review';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('splash');
@@ -40,6 +48,8 @@ const Index = () => {
   const [currentVisit, setCurrentVisit] = useState<any>(null);
   const [invoiceReportData, setInvoiceReportData] = useState<any>(null);
   const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
+  const [invoiceProducts, setInvoiceProducts] = useState<any[]>([]);
+  const [invoiceRemarks, setInvoiceRemarks] = useState<string>('');
 
   const navigateToScreen = (screen: AppScreen, data?: any) => {
     if (data) {
@@ -101,15 +111,11 @@ const Index = () => {
   };
 
   const handleCreateInvoice = () => {
-    // For demo purposes, we'll use a default customer if none selected
-    if (!selectedCustomer) {
-      setSelectedCustomer({
-        id: '1',
-        name: 'Al Rashid Trading Co.',
-        phone: '+971 50 123 4567'
-      });
-    }
-    setCurrentScreen('product-list');
+    // Start the enhanced invoice creation flow
+    setSelectedCustomer(null);
+    setInvoiceProducts([]);
+    setInvoiceRemarks('');
+    setCurrentScreen('customer-selection');
   };
 
   const handleProductsSelected = (products: any[]) => {
@@ -136,6 +142,64 @@ const Index = () => {
     };
     
     setInvoiceReportData(mockInvoiceData);
+    setCurrentScreen('invoice-report');
+  };
+
+  // Enhanced invoice flow handlers
+  const handleCustomerSelected = (customer: any) => {
+    setSelectedCustomer(customer);
+    setCurrentScreen('enhanced-product-list');
+  };
+
+  const handleEnhancedProductsSelected = (products: any[]) => {
+    setInvoiceProducts(products);
+    setCurrentScreen('invoice-remarks');
+  };
+
+  const handleRemarksAdded = (remarks: string) => {
+    setInvoiceRemarks(remarks);
+    setCurrentScreen('invoice-review');
+  };
+
+  const handleInvoiceSaved = () => {
+    // Generate final invoice data
+    const currentVisitData = JSON.parse(localStorage.getItem('currentVisit') || 'null');
+    const subtotal = invoiceProducts.reduce((sum: number, p: any) => sum + (p.unitPrice * p.quantity), 0);
+    const tax = subtotal * 0.15;
+    const total = subtotal + tax;
+
+    const finalInvoiceData = {
+      id: crypto.randomUUID(),
+      invoiceNumber: `INV-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9999) + 1).padStart(4, '0')}`,
+      customerName: selectedCustomer?.name || 'Selected Customer',
+      customerAddress: selectedCustomer?.address || 'Customer Address',
+      customerPhone: selectedCustomer?.phone || '',
+      salesRep: 'Ahmed Al-Mohammed',
+      date: new Date().toISOString(),
+      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      items: invoiceProducts.map((product: any) => ({
+        name: product.name,
+        description: product.description,
+        quantity: product.quantity,
+        unitPrice: product.unitPrice,
+        total: product.unitPrice * product.quantity
+      })),
+      subtotal,
+      tax,
+      total,
+      remarks: invoiceRemarks,
+      visitData: currentVisitData,
+      location: 'Current Location', // TODO: Get actual GPS location
+      timestamp: new Date().toISOString()
+    };
+
+    // Save to localStorage (or send to backend)
+    const existingInvoices = JSON.parse(localStorage.getItem('invoices') || '[]');
+    existingInvoices.unshift(finalInvoiceData);
+    localStorage.setItem('invoices', JSON.stringify(existingInvoices));
+
+    // Navigate to invoice report
+    setInvoiceReportData(finalInvoiceData);
     setCurrentScreen('invoice-report');
   };
 
@@ -243,6 +307,44 @@ const Index = () => {
           <InvoiceDetailsScreen
             invoiceData={selectedInvoice}
             onBack={() => setCurrentScreen('invoices')}
+          />
+        );
+
+      case 'customer-selection':
+        return (
+          <CustomerSelectionScreen
+            onBack={() => setCurrentScreen('home')}
+            onCustomerSelected={handleCustomerSelected}
+          />
+        );
+
+      case 'enhanced-product-list':
+        return (
+          <EnhancedProductList
+            onBack={() => setCurrentScreen('customer-selection')}
+            onContinue={handleEnhancedProductsSelected}
+            customerName={selectedCustomer?.name || ''}
+          />
+        );
+
+      case 'invoice-remarks':
+        return (
+          <InvoiceRemarksScreen
+            onBack={() => setCurrentScreen('enhanced-product-list')}
+            onContinue={handleRemarksAdded}
+            selectedProducts={invoiceProducts}
+            customerName={selectedCustomer?.name || ''}
+          />
+        );
+
+      case 'invoice-review':
+        return (
+          <InvoiceReviewScreen
+            onBack={() => setCurrentScreen('invoice-remarks')}
+            onSaveInvoice={handleInvoiceSaved}
+            selectedProducts={invoiceProducts}
+            customer={selectedCustomer}
+            remarks={invoiceRemarks}
           />
         );
       
